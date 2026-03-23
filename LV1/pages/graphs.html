@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- SEO: page description shown in search engine results -->
+	<meta name="description" content="Visual charts and graphs based on movie database ratings and genres.">
+
+	<!-- SEO: keywords for search engine ranking -->
+	<meta name="keywords" content="movies, charts, movie ratings, genre statistics, cinema data">
+
+	<link rel="stylesheet" href="../styles/styles_graphs.css">
+	<title>Movie Charts</title>
+</head>
+
+<body>
+
+	<!-- ==================== HEADER ==================== -->
+	<header>
+		<h1 class="header-title">Movie Charts</h1>
+	</header>
+
+	<!-- ==================== NAVIGATION ==================== -->
+	<nav aria-label="Primary navigation">
+		<ul class="nav-menu">
+			<li><a href="../index.html">Home</a></li>
+			<li><a href="./graphs.html">Graphs</a></li>
+			<li><a href="./images.html">Images</a></li>
+		</ul>
+	</nav>
+
+	<!-- ==================== MAIN ==================== -->
+	<main>
+
+		<!-- ====== DONUT CHART: Movies by Genre ====== -->
+		<section class="chart-section" aria-labelledby="genre-chart-title">
+			<h2 id="genre-chart-title">Movies by Genre</h2>
+			<p class="chart-description">Distribution of 9 movies across genres from the database.</p>
+
+			<div class="donut-container">
+				<!--
+					Genre data from index.html table:
+					Drama: 4 movies (44.4%)
+					Comedy: 2 movies (22.2%)
+					Animation: 1 movie (11.1%)
+					Crime: 1 movie (11.1%)
+					Action: 1 movie (11.1%)
+
+					Cumulative percentages for conic-gradient:
+					Drama:     0% - 44.4%
+					Comedy:    44.4% - 66.7%
+					Animation: 66.7% - 77.8%
+					Crime:     77.8% - 88.9%
+					Action:    88.9% - 100%
+				-->
+				<div class="donut-chart" role="img" aria-label="Donut chart: Drama 44%, Comedy 22%, Animation 11%, Crime 11%, Action 11%">
+					<div class="donut-hole"></div>
+				</div>
+
+				<!-- Legend -->
+				<ul class="chart-legend" aria-label="Chart legend">
+					<li><span class="legend-color legend-drama"></span> Drama — 4 movies (44%)</li>
+					<li><span class="legend-color legend-comedy"></span> Comedy — 2 movies (22%)</li>
+					<li><span class="legend-color legend-animation"></span> Animation — 1 movie (11%)</li>
+					<li><span class="legend-color legend-crime"></span> Crime — 1 movie (11%)</li>
+					<li><span class="legend-color legend-action"></span> Action — 1 movie (11%)</li>
+				</ul>
+			</div>
+		</section>
+
+		<!-- ====== BAR CHART: Movie Ratings ====== -->
+		<section class="chart-section" aria-labelledby="ratings-chart-title">
+			<h2 id="ratings-chart-title">Movie Ratings</h2>
+			<p class="chart-description">Ratings out of 10 for each movie in the database.</p>
+
+			<div class="bar-chart" role="img" aria-label="Bar chart showing movie ratings from 6.0 to 9.1">
+
+				<!-- Y-axis labels -->
+				<div class="bar-y-axis">
+					<span>10</span>
+					<span>8</span>
+					<span>6</span>
+					<span>4</span>
+					<span>2</span>
+					<span>0</span>
+				</div>
+
+				<!-- Bars container -->
+				<div class="bar-chart-bars">
+
+					<!--
+						Rating data from index.html:
+						Bar heights = (rating / 10) * 100%
+						Using CSS variables --bar-height for each
+					-->
+					<div class="bar-wrapper">
+						<div class="bar" style="--bar-height: 77%;">
+							<span class="bar-value">7.7</span>
+						</div>
+						<span class="bar-label">Bugs Bunny</span>
+					</div>
+
+					<div class="bar-wrapper">
+						<div class="bar" style="--bar-height: 65%;">
+							<span class="bar-value">6.5</span>
+						</div>
+						<span class="bar-label">18 anni</span>
+					</div>
+
+					<div class="bar-wrapper">
+						<div class="bar" style="--bar-height: 70%;">
+							<span class="bar-value">7.0</span>
+						</div>
+						<span class="bar-label">Diner</span>
+					</div>
+
+					<div class="bar-wrapper">
+						<div class="bar" style="--bar-height: 76%;">
+							<span class="bar-value">7.6</span>
+						</div>
+						<span class="bar-label">A ciascuno</span>
+					</div>
+
+					<div class="bar-wrapper">
+						<div class="bar" style="--bar-height: 60%;">
+							<span class="bar-value">6.0</span>
+						</div>
+						<span class="bar-label">Dead-Bang</span>
+					</div>
+
+					<div class="bar-wrapper">
+						<div class="bar" style="--bar-height: 75%;">
+							<span class="bar-value">7.5</span>
+						</div>
+						<span class="bar-label">At Close Range</span>
+					</div>
+
+					<div class="bar-wrapper">
+						<div class="bar" style="--bar-height: 62%;">
+							<span class="bar-value">6.2</span>
+						</div>
+						<span class="bar-label">Mr. Majestyk</span>
+					</div>
+
+					<div class="bar-wrapper">
+						<div class="bar" style="--bar-height: 82%;">
+							<span class="bar-value">8.2</span>
+						</div>
+						<span class="bar-label">Fail-Safe</span>
+					</div>
+
+					<div class="bar-wrapper">
+						<div class="bar" style="--bar-height: 91%;">
+							<span class="bar-value">9.1</span>
+						</div>
+						<span class="bar-label">Some Like It Hot</span>
+					</div>
+
+				</div>
+			</div>
+		</section>
+
+	</main>
+
+	<!-- ==================== FOOTER ==================== -->
+	<footer>
+		<p>&copy; 2026. Web Programming. All rights reserved.</p>
+	</footer>
+
+</body>
+</html>

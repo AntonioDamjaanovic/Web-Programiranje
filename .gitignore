@@ -1,0 +1,22 @@
+# Claude
+.env
+.env.local
+claude_config.json
+
+# HTML/CSS/Web
+node_modules/
+dist/
+build/
+*.log
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+*.swp
+*.swo
+*~

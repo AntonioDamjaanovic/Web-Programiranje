@@ -1,0 +1,393 @@
+/* ============================
+   CSS CUSTOM PROPERTIES
+   Global variables for colors, dimensions, and key styles.
+   Aligned with style.css and style_images.css palette.
+   ============================ */
+:root {
+	/* -- Page colors (matching index.html theme) -- */
+	--color-bg: #fafafa;
+	--color-text: #333;
+	--color-heading: #222;
+	--color-header-bg: #222;
+	--color-nav-bg: #333;
+	--color-nav-hover: #444;
+	--color-section-bg: #fff;
+	--color-border: #e0e0e0;
+	--color-muted: #888;
+
+	/* -- Genre colors for donut chart -- */
+	--color-drama: #5a7d9a;
+	--color-comedy: #8fbc8f;
+	--color-animation: #d4a574;
+	--color-crime: #b0879b;
+	--color-action: #c9826d;
+
+	/* -- Bar chart color -- */
+	--color-bar: #5a7d9a;
+	--color-bar-hover: #4a6a84;
+
+	/* -- Chart dimensions -- */
+	--donut-size: 250px;
+	--donut-hole-size: 120px;
+	--bar-chart-height: 300px;
+
+	/* -- Animation durations -- */
+	--anim-donut: 1.2s;
+	--anim-bar: 0.8s;
+}
+
+/* ============================
+   GENERAL STYLES (Mobile-first)
+   ============================ */
+* {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Segoe UI', Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	background-color: var(--color-bg);
+	color: var(--color-text);
+	line-height: 1.6;
+}
+
+/* ============================
+   HEADER
+   ============================ */
+header {
+	background: var(--color-header-bg);
+	color: #fff;
+	padding: 30px 20px;
+	text-align: center;
+}
+
+.header-title {
+	margin: 0;
+	font-size: 2rem;
+	font-weight: 600;
+}
+
+/* ============================
+   NAVIGATION
+   ============================ */
+nav {
+	background: var(--color-nav-bg);
+	position: sticky;
+	top: 0;
+	z-index: 100;
+}
+
+.nav-menu {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.nav-menu li a {
+	display: block;
+	padding: 12px 20px;
+	text-decoration: none;
+	color: #ccc;
+	font-weight: 600;
+	transition: background 0.3s;
+}
+
+.nav-menu li a:hover,
+.nav-menu li a:focus {
+	color: #fff;
+	background: var(--color-nav-hover);
+}
+
+/* ============================
+   MAIN CONTENT
+   ============================ */
+main {
+	max-width: 1100px;
+	margin: 20px auto;
+	padding: 0 15px;
+}
+
+/* ============================
+   CHART SECTIONS
+   ============================ */
+.chart-section {
+	background: var(--color-section-bg);
+	padding: 25px;
+	margin-bottom: 20px;
+	border-radius: 6px;
+	border: 1px solid var(--color-border);
+}
+
+.chart-section h2 {
+	margin-top: 0;
+	font-size: 1.4rem;
+	color: var(--color-heading);
+}
+
+.chart-description {
+	color: var(--color-muted);
+	font-size: 0.9rem;
+	margin-bottom: 20px;
+}
+
+/* ============================
+   DONUT CHART
+   CSS-only using conic-gradient.
+   Data: Drama 44.4%, Comedy 22.2%,
+         Animation 11.1%, Crime 11.1%, Action 11.1%
+   ============================ */
+.donut-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 25px;
+}
+
+.donut-chart {
+	width: var(--donut-size);
+	height: var(--donut-size);
+	border-radius: 50%;
+	/* Conic gradient segments based on cumulative genre percentages */
+	background: conic-gradient(
+		var(--color-drama)     0% 44.4%,
+		var(--color-comedy)    44.4% 66.7%,
+		var(--color-animation) 66.7% 77.8%,
+		var(--color-crime)     77.8% 88.9%,
+		var(--color-action)    88.9% 100%
+	);
+	position: relative;
+	/* Animation: donut spins in on page load */
+	animation: revealDonut var(--anim-donut) ease-out;
+}
+
+/* Center hole to create the donut shape */
+.donut-hole {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: var(--donut-hole-size);
+	height: var(--donut-hole-size);
+	background: var(--color-section-bg);
+	border-radius: 50%;
+}
+
+/* ============================
+   DONUT CHART ANIMATION
+   Segments rotate and reveal on load.
+   ============================ */
+@keyframes revealDonut {
+	from {
+		transform: rotate(-90deg);
+		opacity: 0;
+	}
+	to {
+		transform: rotate(0deg);
+		opacity: 1;
+	}
+}
+
+/* ============================
+   CHART LEGEND
+   ============================ */
+.chart-legend {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px 20px;
+	justify-content: center;
+}
+
+.chart-legend li {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 0.85rem;
+	color: var(--color-text);
+}
+
+/* Color swatches for legend */
+.legend-color {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	border-radius: 3px;
+	flex-shrink: 0;
+}
+
+.legend-drama     { background: var(--color-drama); }
+.legend-comedy    { background: var(--color-comedy); }
+.legend-animation { background: var(--color-animation); }
+.legend-crime     { background: var(--color-crime); }
+.legend-action    { background: var(--color-action); }
+
+/* ============================
+   BAR CHART
+   CSS-only horizontal layout with animated bars.
+   Data: ratings for each of the 9 movies.
+   ============================ */
+.bar-chart {
+	display: flex;
+	gap: 10px;
+	align-items: flex-end;
+}
+
+/* Y-axis labels */
+.bar-y-axis {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: var(--bar-chart-height);
+	font-size: 0.75rem;
+	color: var(--color-muted);
+	margin-bottom: 45px; /* align with bar container bottom margin */
+	text-align: right;
+	min-width: 20px;
+}
+
+/* Container for all bars */
+.bar-chart-bars {
+	display: flex;
+	gap: 8px;
+	align-items: flex-end;
+	flex: 1;
+	height: var(--bar-chart-height);
+	border-left: 1px solid var(--color-border);
+	border-bottom: 1px solid var(--color-border);
+	padding: 0 5px;
+	margin-bottom: 45px; /* space for absolutely positioned bar labels */
+}
+
+/* Individual bar wrapper — position:relative so label can be placed outside the bar area */
+.bar-wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex: 1;
+	height: 100%;
+	justify-content: flex-end;
+	position: relative;
+}
+
+/* The bar itself */
+.bar {
+	width: 100%;
+	max-width: 60px;
+	background: var(--color-bar);
+	border-radius: 3px 3px 0 0;
+	position: relative;
+	transition: background 0.2s;
+	/* Animation: bars grow from zero to full height on load */
+	animation: growBar var(--anim-bar) ease-out forwards;
+	height: var(--bar-height);
+}
+
+/* ============================
+   BAR CHART ANIMATION
+   Bars grow from zero height to their target value.
+   ============================ */
+@keyframes growBar {
+	from {
+		height: 0;
+	}
+	to {
+		height: var(--bar-height);
+	}
+}
+
+/* Bar hover effect */
+.bar:hover {
+	background: var(--color-bar-hover);
+}
+
+/* Rating value displayed above the bar */
+.bar-value {
+	position: absolute;
+	top: -20px;
+	left: 50%;
+	transform: translateX(-50%);
+	font-size: 0.7rem;
+	font-weight: 600;
+	color: var(--color-text);
+	white-space: nowrap;
+}
+
+/* Movie title below the bar — absolutely positioned so it doesn't push bars up */
+.bar-label {
+	position: absolute;
+	bottom: -40px;
+	left: 50%;
+	transform: translateX(-50%);
+	font-size: 0.65rem;
+	color: var(--color-muted);
+	text-align: center;
+	word-break: break-word;
+	width: 70px;
+}
+
+/* ============================
+   FOOTER
+   ============================ */
+footer {
+	text-align: center;
+	padding: 15px;
+	background: var(--color-header-bg);
+	color: var(--color-muted);
+	margin-top: 30px;
+}
+
+/* ============================
+   RESPONSIVE - DESKTOP
+   ============================ */
+@media (min-width: 769px) {
+	.header-title {
+		font-size: 2.5rem;
+	}
+
+	/* Donut chart and legend side by side on desktop */
+	.donut-container {
+		flex-direction: row;
+		justify-content: center;
+	}
+
+	.chart-legend {
+		flex-direction: column;
+	}
+}
+
+/* ============================
+   RESPONSIVE - SMALL SCREENS
+   ============================ */
+@media (max-width: 768px) {
+	.nav-menu {
+		flex-direction: column;
+		text-align: center;
+	}
+
+	.chart-section {
+		padding: 15px;
+	}
+
+	/* Scale donut chart down on mobile */
+	:root {
+		--donut-size: 200px;
+		--donut-hole-size: 90px;
+		--bar-chart-height: 220px;
+	}
+
+	/* Smaller bar labels on mobile */
+	.bar-label {
+		font-size: 0.55rem;
+		width: 50px;
+	}
+
+	.bar-value {
+		font-size: 0.6rem;
+	}
+}

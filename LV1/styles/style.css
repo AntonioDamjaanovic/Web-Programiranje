@@ -1,0 +1,256 @@
+/* GENERAL STYLES (Mobile-first) */
+* {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Segoe UI', Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	background-color: #fafafa;
+	color: #333;
+	line-height: 1.6;
+}
+
+/* HEADER */
+header {
+	background: #222;
+	color: #fff;
+	padding: 30px 20px;
+	text-align: center;
+}
+
+.header-title {
+	margin: 0;
+	font-size: 2rem;
+	font-weight: 600;
+	/* Animation: fade-in title */
+	animation: fadeIn 1s ease-out;
+}
+
+/* NAVIGATION */
+nav {
+	background: #333;
+	position: sticky;
+	top: 0;
+	z-index: 100;
+}
+
+.nav-menu {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.nav-menu li a {
+	display: block;
+	padding: 12px 20px;
+	text-decoration: none;
+	color: #ccc;
+	font-weight: 600;
+	transition: background 0.3s;
+}
+
+.nav-menu li a:hover,
+.nav-menu li a:focus {
+	color: #fff;
+	background: #444;
+}
+
+/* MAIN CONTENT */
+main {
+	max-width: 1100px;
+	margin: 20px auto;
+	padding: 0 15px;
+}
+
+/* SECTIONS */
+.content-section {
+	background: #fff;
+	padding: 25px;
+	margin-bottom: 20px;
+	border-radius: 6px;
+	border: 1px solid #e0e0e0;
+}
+
+.content-section h2 {
+	margin-top: 0;
+	font-size: 1.4rem;
+	color: #222;
+}
+
+/* ============================
+   LAYOUT: TABLE + IMAGE
+   Mobile: image below table
+   Desktop: image to the right of the table
+   ============================ */
+.table-image-layout {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+/* MOVIE TABLE */
+.table-wrapper {
+	overflow-x: auto; /* horizontal scroll on small screens */
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.9rem;
+}
+
+th {
+	padding: 10px;
+	text-align: left;
+	font-weight: 600;
+	background: #333;
+	color: #fff;
+	border-bottom: 2px solid #222;
+}
+
+td {
+	padding: 10px;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+/* Alternating row colors */
+tbody tr:nth-child(even) {
+	background: #f5f5f5;
+}
+
+/* Row hover effect */
+tbody tr:hover {
+	background: #e8e8e8;
+	transition: background 0.2s;
+}
+
+/* ASIDE - RESPONSIVE IMAGE  */
+.image-aside {
+	text-align: center;
+}
+
+.image-aside figure {
+	margin: 0;
+}
+
+/* Control display, opacity and hover effect */
+.featured-image {
+	display: block;
+	width: 100%;
+	max-width: 400px;
+	margin: 0 auto;
+	border-radius: 6px;
+	opacity: 0.9;
+	transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Hover: scale up and full opacity */
+.featured-image:hover {
+	transform: scale(1.05);
+	opacity: 1;
+}
+
+figcaption {
+	margin-top: 8px;
+	font-style: italic;
+	color: #888;
+	font-size: 0.85rem;
+}
+
+/* CSS-ONLY Interactive Button */
+.cta-button {
+	display: inline-block;
+	margin-top: 15px;
+	padding: 10px 28px;
+	background: #333;
+	color: #fff;
+	text-decoration: none;
+	font-weight: 600;
+	border-radius: 4px;
+	transition: background 0.3s;
+}
+
+.cta-button:hover {
+	background: #555;
+}
+
+/* CSS ANIMATIONS */
+
+/* Fade-in for header and sections */
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-15px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.fade-in {
+	animation: fadeIn 0.8s ease-out;
+}
+
+.slide-in {
+	animation: fadeIn 0.8s ease-out;
+}
+
+/* FOOTER */
+footer {
+	text-align: center;
+	padding: 15px;
+	background: #222;
+	color: #888;
+	margin-top: 30px;
+}
+
+/* RESPONSIVE - DESKTOP */
+@media (min-width: 769px) {
+	.header-title {
+		font-size: 2.5rem;
+	}
+
+	/* Desktop: table on the left, image on the right */
+	.table-image-layout {
+		flex-direction: row;
+		align-items: flex-start;
+	}
+
+	.table-wrapper {
+		flex: 2;
+	}
+
+	.image-aside {
+		flex: 1;
+	}
+
+	.featured-image {
+		max-width: 100%;
+	}
+}
+
+/* RESPONSIVE - SMALL SCREENS */
+@media (max-width: 768px) {
+	.nav-menu {
+		flex-direction: column;
+		text-align: center;
+	}
+
+	.content-section {
+		padding: 15px;
+	}
+
+	table {
+		font-size: 0.8rem;
+	}
+
+	th, td {
+		padding: 8px 6px;
+	}
+}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gallery</title>
+    <link rel="stylesheet" href="/styles/style_gallery.css">
+</head>
+<body>
+    <h1>Gallery</h1>
+    <section class="gallery">
+        <% images.forEach(image => { %>
+            <figure>
+                <a href="#<%= image.id %>">
+                    <img src="<%= image.url %>" alt="<%= image.title %>">
+                </a>
+                <figcaption><%= image.title %></figcaption>
+            </figure>
+
+            <div class="lightbox" id="<%= image.id %>">
+                <a href="#" class="lightbox-close" aria-label="Close">&times;</a>
+                <img src="<%= image.url %>" alt="<%= image.title %>">
+            </div>
+        <% }); %>
+    </section>
+</body>
+</html>

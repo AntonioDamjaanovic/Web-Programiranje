@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="View and manage your movie borrowing cart.">
+	<meta name="keywords" content="cart, movies, borrowing, cinema">
+	<link rel="stylesheet" href="styles/style.css">
+	<link rel="stylesheet" href="styles/movies.css">
+	<title>Movie Cart - Borrowing</title>
+</head>
+
+<body>
+
+	<!-- ==================== HEADER ==================== -->
+	<header>
+		<h1 class="header-title">Movie Database</h1>
+	</header>
+
+	<!-- ==================== NAVIGATION ==================== -->
+	<nav aria-label="Primary navigation">
+		<ul class="nav-menu">
+			<li><a href="index.html">Home</a></li>
+			<li><a href="cart.html" class="active">My Cart</a></li>
+			<li><a href="pages/graphs.html">Graphs</a></li>
+			<li><a href="pages/images.html">Images</a></li>
+			<li><a href="gallery">Gallery</a></li>
+		</ul>
+	</nav>
+
+	<!-- ==================== MAIN ==================== -->
+	<main>
+
+		<!-- Section - Cart Title -->
+		<section class="content-section" aria-labelledby="cart-title">
+			<h2 id="cart-title">My Borrowing Cart</h2>
+		</section>
+
+		<!-- Section - Cart Info -->
+		<section class="content-section cart-info">
+			<h3>🛒 Shopping Cart</h3>
+			<p id="cart-summary">Total movies in cart: 0</p>
+			<p>Review your selected movies below. You can remove items or confirm your borrowing.</p>
+		</section>
+
+		<!-- Section - Cart Table -->
+		<section class="content-section">
+			<div class="table-wrapper">
+				<table id="cart-table">
+					<thead>
+						<tr>
+							<th>Title</th>
+							<th>Year</th>
+							<th>Genre</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody id="cart-tbody">
+						<tr>
+							<td colspan="4" class="loading">Loading cart...</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+
+		<!-- Section - Cart Actions -->
+		<section class="content-section filters-container" id="cart-actions">
+			<button class="btn-primary" id="confirm-btn" onclick="confirmBorrowing()">
+				📦 Confirm Borrowing
+			</button>
+			<button class="btn-secondary" id="clear-btn" onclick="clearCart(); displayCart();">
+				🗑️ Clear Cart
+			</button>
+			<a href="index.html" class="btn-secondary" style="text-decoration: none; text-align: center; display: flex; align-items: center; justify-content: center;">
+				← Continue Shopping
+			</a>
+		</section>
+
+	</main>
+
+	<!-- ==================== FOOTER ==================== -->
+	<footer>
+		<p>&copy; 2026 Movie Database. All rights reserved.</p>
+	</footer>
+
+	<!-- PapaParse Library for CSV parsing -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+	
+	<!-- Main JavaScript File -->
+	<script src="js/movies.js"></script>
+
+	<!-- Cart Page Initialization -->
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			displayCart();
+		});
+	</script>
+
+</body>
+
+</html>

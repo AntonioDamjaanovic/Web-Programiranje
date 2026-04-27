@@ -5,13 +5,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<!-- SEO: page description shown in search engine results -->
-	<meta name="description" content="List of movies with ratings, genres and details.">
+	<meta name="description" content="Filter and manage movies. Add movies to your borrowing cart.">
 
-	<!-- SEO: keywords for better search engine ranking -->
-	<meta name="keywords" content="movies, movie ratings, genres, cinema, reviews">
+	<meta name="keywords" content="movies, filtering, cart, cinema, reviews">
 
 	<link rel="stylesheet" href="styles/style.css">
-	<title>Movie Database</title>
+	<link rel="stylesheet" href="styles/movies.css">
+	<link rel="stylesheet" href="styles/movies.css">
+	<title>Movie Database - Browse & Add to Cart</title>
 </head>
 
 <body>
@@ -24,7 +25,8 @@
 	<!-- ==================== NAVIGATION ==================== -->
 	<nav aria-label="Primary navigation">
 		<ul class="nav-menu">
-			<li><a href="index.html">Home</a></li>
+			<li><a href="index.html" class="active">Home</a></li>
+			<li><a href="cart.html">My Cart <span id="cart-badge" class="cart-badge" style="display: none;">0</span></a></li>
 			<li><a href="pages/graphs.html">Graphs</a></li>
 			<li><a href="pages/images.html">Images</a></li>
 			<li><a href="gallery">Gallery</a></li>
@@ -34,90 +36,112 @@
 	<!-- ==================== MAIN ==================== -->
 	<main>
 
-		<!-- Section - Movie table and Image -->
-		<section class="content-section" aria-labelledby="movie-titles">
-			<h2 id="movie-titles">List of Movies</h2>
-
-			<div class="table-image-layout">
-
-				<!-- Movie table -->
-				<div class="table-wrapper">
-					<table>
-						<thead>
-							<tr>
-								<th>ID</th>
-								<th>Title</th>
-								<th>Year</th>
-								<th>Genre</th>
-								<th>Duration (min)</th>
-								<th>Country</th>
-								<th>Rating</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr><td>2</td><td>Bugs Bunny's Third Movie</td><td>1982</td><td>Animation</td><td>76</td><td>USA</td><td>7.7</td></tr>
-							<tr><td>3</td><td>18 anni tra una settimana</td><td>1991</td><td>Drama</td><td>98</td><td>Italy</td><td>6.5</td></tr>
-							<tr><td>18</td><td>Diner</td><td>1982</td><td>Comedy</td><td>95</td><td>USA</td><td>7.0</td></tr>
-							<tr><td>22</td><td>A ciascuno il suo</td><td>1967</td><td>Drama</td><td>93</td><td>Italy</td><td>7.6</td></tr>
-							<tr><td>23</td><td>Dead-Bang</td><td>1989</td><td>Crime</td><td>109</td><td>USA</td><td>6.0</td></tr>
-							<tr><td>26</td><td>At Close Range</td><td>1986</td><td>Drama</td><td>115</td><td>USA</td><td>7.5</td></tr>
-							<tr><td>38</td><td>Mr. Majestyk</td><td>1974</td><td>Action</td><td>105</td><td>USA</td><td>6.2</td></tr>
-							<tr><td>49</td><td>Fail-Safe</td><td>1964</td><td>Drama</td><td>110</td><td>USA</td><td>8.2</td></tr>
-							<tr><td>51</td><td>Some Like It Hot</td><td>1959</td><td>Comedy</td><td>120</td><td>USA</td><td>9.1</td></tr>
-						</tbody>
-					</table>
+		<!-- Section - Filters -->
+		<section class="content-section" aria-labelledby="filters-title">
+			<h2 id="filters-title">Filter Movies</h2>
+			
+			<div class="filters-container">
+				<!-- Genre Filter -->
+				<div class="filter-group">
+					<label for="genre-filter">Genre:</label>
+					<select id="genre-filter">
+						<option value="">All Genres</option>
+					</select>
 				</div>
 
-				<!-- Responsive image: desktop vs mobile version -->
-				<aside class="image-aside" aria-label="Featured movie">
-					<figure>
-						<picture>
-							<!-- Desktop image (width >= 769px) -->
-							<source media="(min-width: 769px)" src="images/sentimental_value.jpg">
+				<!-- Year Range Filter -->
+				<div class="filter-group">
+					<label for="year-from">Year From:</label>
+					<input type="number" id="year-from" placeholder="e.g., 1990" min="1900" max="2026">
+				</div>
 
-							<!-- Mobile image (width < 769px) -->
-							<source media="(max-width: 768px)" src="images/sentimental_value.jpg">
+				<div class="filter-group">
+					<label for="year-to">Year To:</label>
+					<input type="number" id="year-to" placeholder="e.g., 2020" min="1900" max="2026">
+				</div>
 
-							<img src="images/sentimental_value.jpg" alt="Sentimental Value" role="img" aria-describedby="image-description" class="featured-image">
-						</picture>
+				<!-- Country Filter -->
+				<div class="filter-group">
+					<label for="country-filter">Country:</label>
+					<select id="country-filter">
+						<option value="">All Countries</option>
+					</select>
+				</div>
 
-						<figcaption id="image-description">
-							Sentimental Value poster.
-						</figcaption>
-					</figure>
-				</aside>
+				<!-- Rating Range Filter -->
+				<div class="filter-group">
+					<label for="rating-from">Rating From:</label>
+					<input type="number" id="rating-from" placeholder="e.g., 7.0" min="0" max="10" step="0.1">
+				</div>
 
+				<div class="filter-group">
+					<label for="rating-to">Rating To:</label>
+					<input type="number" id="rating-to" placeholder="e.g., 10.0" min="0" max="10" step="0.1">
+				</div>
+
+				<!-- Sorting -->
+				<div class="filter-group">
+					<label for="sort-by">Sort By:</label>
+					<select id="sort-by">
+						<option value="">None</option>
+						<option value="year-asc">Year (Ascending)</option>
+						<option value="year-desc">Year (Descending)</option>
+						<option value="rating-asc">Rating (Ascending)</option>
+						<option value="rating-desc">Rating (Descending)</option>
+						<option value="title-asc">Title (A-Z)</option>
+					</select>
+				</div>
+
+				<!-- Action Buttons -->
+				<div class="filter-group">
+					<button id="apply-filters-btn" class="btn-primary">Apply Filters</button>
+					<button id="reset-filters-btn" class="btn-secondary">Reset</button>
+				</div>
+			</div>
+
+			<div id="results-count" class="results-count"></div>
+		</section>
+
+		<!-- Section - Movie Table -->
+		<section class="content-section" aria-labelledby="movies-title">
+			<h2 id="movies-title">Movies</h2>
+
+			<div class="table-wrapper">
+				<table id="movies-table">
+					<thead>
+						<tr>
+							<th>Title</th>
+							<th>Year</th>
+							<th>Genre</th>
+							<th>Duration (min)</th>
+							<th>Country</th>
+							<th>Rating</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody id="movies-tbody">
+						<tr>
+							<td colspan="7" class="loading">Loading movies...</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</section>
-
-		<!-- Section - webpage information -->
-		<section class="content-section fade-in" aria-labelledby="about-page">
-			<h2 id="about-page">About this page</h2>
-			<p>
-				This page was created as a part of the Web Programming course exercise.
-			</p>
-
-			<!-- CSS-only interactive button -->
-			<a href="#movie-titles" class="cta-button" role="button">
-				Go to Movie List
-			</a>
-		</section>
-
-		<!-- Article -->
-		<article class="content-section slide-in" aria-labelledby="about-page">
-			<h2 id="about-page">Fun Facts</h2>
-			<p>
-				Movie <strong>"Sentimental Value"</strong> is a drama about a filmmaker who seeks to cast his 
-                semi-estranged daughter in the lead role of his most personal project to date.
-			</p>
-		</article>
 
 	</main>
 
 	<!-- ==================== FOOTER ==================== -->
 	<footer>
-		<p>&copy; 2026. Web Programming. All rights reserved.</p>
+		<p>&copy; 2026 Movie Database. All rights reserved.</p>
 	</footer>
 
+	<!-- PapaParse Library for CSV parsing -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+	
+	<!-- Main JavaScript File -->
+	<script src="js/movies.js"></script>
+
 </body>
+
+</html>
 </html>

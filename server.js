@@ -1,19 +1,35 @@
 const express = require('express');
 const app = express();
-
-app.set('view engine', 'ejs'); // Postavljanje EJS kao templating enginea
-
-app.use(express.static('public')); // "posluzuje" index.html
-// Automatski koristi sve iz mape public
-
-app.listen(3000, () => {
-    console.log("Server pokrenut na http://localhost:3000");
-});
-
-// Ucitava slike s poslužitelja s poslužitelja iz mape /images
 const fs = require('fs');
 const path = require('path');
 
+app.set('view engine', 'ejs'); // Postavljanje EJS kao templating enginea
+
+// Test route
+app.get('/test', (req, res) => {
+    res.json({ message: 'Test route working' });
+});
+
+// CSV endpoint - serve movies.csv
+app.get('/materials/movies.csv', (req, res) => {
+    try {
+        const filePath = path.resolve(__dirname, 'materials', 'movies.csv');
+        console.log('Attempting to serve CSV from:', filePath);
+        const csvContent = fs.readFileSync(filePath, 'utf8');
+        console.log('CSV content length:', csvContent.length);
+        res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+        res.setHeader('Content-Disposition', 'inline');
+        res.send(csvContent);
+    } catch (err) {
+        console.error('CSV serving error:', err.message);
+        res.status(500).json({ error: 'Failed to serve CSV', details: err.message });
+    }
+});
+
+// Serve static files from public folder
+app.use(express.static('public'));
+
+// Routes
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
@@ -33,12 +49,8 @@ app.get('/gallery', (req, res) => {
     res.render('gallery', { images });
 });
 
-// Deploy on Railway
+// Start server
 const PORT = process.env.PORT || 3000;
-app.get('/', (req, res) => {
-    res.send('Pozdrav sa Railway servera!');
-});
-
 app.listen(PORT, () => {
     console.log(`Server pokrenut na portu ${PORT}`);
 });

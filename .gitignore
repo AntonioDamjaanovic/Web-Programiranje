@@ -2,6 +2,8 @@
 .env
 .env.local
 claude_config.json
+.claude
+CLAUDE.md
 
 # HTML/CSS/Web
 node_modules/

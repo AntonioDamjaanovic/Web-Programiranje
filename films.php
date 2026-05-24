@@ -131,6 +131,7 @@ $user = current_user();
                 </p>
             </div>
             <div class="dashboard-actions">
+                <a class="cta-button" href="gallery.php">Gallery</a>
                 <?php if ($user): ?>
                     <a class="cta-button" href="wishlist.php">My wishlist</a>
                 <?php endif; ?>

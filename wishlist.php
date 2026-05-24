@@ -137,6 +137,7 @@ if ($warning === null) {
             </div>
             <div class="dashboard-actions">
                 <a class="cta-button" href="films.php">Browse films</a>
+                <a class="cta-button" href="gallery.php">Gallery</a>
                 <?php if (is_admin()): ?>
                     <a class="cta-button" href="dashboard.php">Dashboard</a>
                 <?php endif; ?>

@@ -1,0 +1,118 @@
+/* Photo detail page */
+
+.photo-section h2 {
+    margin-bottom: 14px;
+}
+
+.photo-image-wrap {
+    margin: 0 0 18px;
+    text-align: center;
+    background: #f3f3f3;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 8px;
+}
+
+.photo-image {
+    max-width: 100%;
+    max-height: 70vh;
+    height: auto;
+    display: inline-block;
+    border-radius: 4px;
+}
+
+.photo-meta {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 6px;
+    margin: 0 0 20px;
+}
+
+.photo-meta dt {
+    font-weight: 600;
+    color: #555;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    margin-top: 8px;
+}
+
+.photo-meta dd {
+    margin: 0;
+    color: #222;
+    font-size: 1rem;
+}
+
+.rating-form {
+    border-top: 1px solid #eee;
+    padding-top: 18px;
+}
+
+.rating-fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.rating-fieldset legend {
+    font-weight: 600;
+    margin-bottom: 10px;
+    padding: 0;
+}
+
+.rating-choices {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+}
+
+.rating-choice {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    background: #fff;
+    transition: background 0.15s, border-color 0.15s;
+    font-size: 1rem;
+}
+
+.rating-choice:hover {
+    border-color: #888;
+    background: #fafafa;
+}
+
+.rating-choice input[type="radio"] {
+    margin: 0;
+}
+
+.rating-form .btn-primary {
+    width: auto;
+    min-width: 180px;
+}
+
+.photo-signin-hint {
+    border-top: 1px solid #eee;
+    padding-top: 18px;
+    margin: 0;
+    color: #555;
+}
+
+.photo-signin-hint a {
+    color: #222;
+    font-weight: 600;
+}
+
+@media (min-width: 600px) {
+    .photo-meta {
+        grid-template-columns: 160px 1fr;
+        column-gap: 18px;
+    }
+
+    .photo-meta dt {
+        margin-top: 0;
+    }
+}

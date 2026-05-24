@@ -166,6 +166,106 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         $action = 'list';
+    } elseif ($op === 'upload_image') {
+        $action = 'upload_image';
+
+        $opisInput   = trim((string) ($_POST['opis'] ?? ''));
+        $maxBytes    = 5 * 1024 * 1024; // 5 MB
+        $allowedMime = ['image/jpeg' => 'jpg', 'image/png' => 'png'];
+
+        $file = $_FILES['image'] ?? null;
+
+        if (!$file || !isset($file['error'])) {
+            $errors[] = 'No file was uploaded.';
+        } elseif ($file['error'] !== UPLOAD_ERR_OK) {
+            switch ($file['error']) {
+                case UPLOAD_ERR_INI_SIZE:
+                case UPLOAD_ERR_FORM_SIZE:
+                    $errors[] = 'The file is too large.';
+                    break;
+                case UPLOAD_ERR_NO_FILE:
+                    $errors[] = 'Please choose a file.';
+                    break;
+                case UPLOAD_ERR_PARTIAL:
+                    $errors[] = 'The upload was interrupted. Please try again.';
+                    break;
+                default:
+                    $errors[] = 'Upload failed (code ' . (int) $file['error'] . ').';
+            }
+        } elseif (!is_uploaded_file($file['tmp_name'])) {
+            $errors[] = 'Invalid upload.';
+        } elseif (($file['size'] ?? 0) <= 0 || $file['size'] > $maxBytes) {
+            $errors[] = 'File must be larger than 0 bytes and at most 5 MB.';
+        } elseif (mb_strlen($opisInput) > 1000) {
+            $errors[] = 'Description is too long (max 1000 characters).';
+        } else {
+            // Detect real MIME from the file contents, not the client-supplied type.
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mime  = $finfo ? finfo_file($finfo, $file['tmp_name']) : false;
+            if ($finfo) {
+                finfo_close($finfo);
+            }
+
+            if (!$mime || !isset($allowedMime[$mime])) {
+                $errors[] = 'Only JPEG and PNG images are allowed.';
+            } else {
+                $ext      = $allowedMime[$mime];
+                $safeName = bin2hex(random_bytes(16)) . '.' . $ext;
+                $destDir  = __DIR__ . '/uploads/slike';
+                $destPath = $destDir . '/' . $safeName;
+                $webPath  = 'uploads/slike/' . $safeName;
+
+                if (!is_dir($destDir) && !mkdir($destDir, 0755, true) && !is_dir($destDir)) {
+                    error_log('Could not create upload directory: ' . $destDir);
+                    $errors[] = 'Server could not store the file. Please try again.';
+                } elseif (!move_uploaded_file($file['tmp_name'], $destPath)) {
+                    error_log('move_uploaded_file failed for ' . $file['tmp_name']);
+                    $errors[] = 'Could not save the uploaded file.';
+                } else {
+                    @chmod($destPath, 0644);
+
+                    $originalName = (string) ($file['name'] ?? $safeName);
+                    if (mb_strlen($originalName) > 255) {
+                        $originalName = mb_substr($originalName, 0, 255);
+                    }
+
+                    try {
+                        $stmt = $pdo->prepare(
+                            'INSERT INTO slike (naziv_datoteke, opis, putanja, izvor)
+                             VALUES (?, ?, ?, ?)'
+                        );
+                        $stmt->execute([
+                            $originalName,
+                            $opisInput !== '' ? $opisInput : null,
+                            $webPath,
+                            'local',
+                        ]);
+                        $notice = 'Image uploaded.';
+                    } catch (PDOException $e) {
+                        @unlink($destPath);
+                        error_log('Slika insert failed: ' . $e->getMessage());
+                        $errors[] = 'Could not record the upload in the database.';
+                    }
+                }
+            }
+        }
+    } elseif ($op === 'delete_rating') {
+        $ratingId = (int) ($_POST['id'] ?? 0);
+        if ($ratingId <= 0) {
+            $errors[] = 'Invalid rating id.';
+        } else {
+            try {
+                $stmt = $pdo->prepare('DELETE FROM ocjene WHERE id = ?');
+                $stmt->execute([$ratingId]);
+                $notice = $stmt->rowCount() > 0
+                    ? 'Rating deleted.'
+                    : 'Rating was already gone.';
+            } catch (PDOException $e) {
+                error_log('Rating delete failed: ' . $e->getMessage());
+                $errors[] = 'Could not delete the rating.';
+            }
+        }
+        $action = 'ratings';
     }
 }
 
@@ -186,6 +286,26 @@ if ($action === 'edit' && !$editing) {
         }
     } else {
         $action = 'list';
+    }
+}
+
+$ratings = [];
+if ($action === 'ratings') {
+    try {
+        $stmt = $pdo->prepare(
+            'SELECT o.id, o.ocjena, o.vrijeme_ocjene,
+                    u.id  AS user_id, u.username,
+                    s.id  AS slika_id, s.naziv_datoteke
+               FROM ocjene o
+               JOIN users u ON u.id = o.id_korisnik
+               JOIN slike s ON s.id = o.id_slika
+              ORDER BY o.vrijeme_ocjene DESC, o.id DESC'
+        );
+        $stmt->execute();
+        $ratings = $stmt->fetchAll();
+    } catch (PDOException $e) {
+        error_log('Ratings load failed: ' . $e->getMessage());
+        $errors[] = 'Could not load ratings.';
     }
 }
 
@@ -231,6 +351,9 @@ $user = current_user();
             <div class="dashboard-actions">
                 <a class="cta-button" href="dashboard.php">All films</a>
                 <a class="cta-button" href="dashboard.php?action=new">Add film</a>
+                <a class="cta-button" href="dashboard.php?action=upload_image">Upload image</a>
+                <a class="cta-button" href="dashboard.php?action=ratings">Ratings</a>
+                <a class="cta-button" href="gallery.php">Gallery</a>
                 <a class="cta-button" href="logout.php">Sign out</a>
             </div>
         </section>
@@ -332,6 +455,74 @@ $user = current_user();
                         <a href="dashboard.php" class="cta-button cta-cancel">Cancel</a>
                     </div>
                 </form>
+            </section>
+        <?php elseif ($action === 'upload_image'): ?>
+            <section class="content-section">
+                <h2>Upload image</h2>
+                <p class="dashboard-user">JPEG or PNG, up to 5&nbsp;MB.</p>
+                <form method="post" action="dashboard.php" enctype="multipart/form-data" novalidate>
+                    <input type="hidden" name="op" value="upload_image">
+
+                    <div class="form-row">
+                        <label for="image">Image file *</label>
+                        <input type="file" id="image" name="image"
+                               accept="image/jpeg,image/png" required>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="opis">Description</label>
+                        <textarea id="opis" name="opis" rows="3" maxlength="1000"></textarea>
+                    </div>
+
+                    <div class="form-buttons">
+                        <button type="submit" class="btn-primary">Upload</button>
+                        <a href="dashboard.php" class="cta-button cta-cancel">Cancel</a>
+                    </div>
+                </form>
+            </section>
+        <?php elseif ($action === 'ratings'): ?>
+            <section class="content-section">
+                <h2>Ratings</h2>
+                <?php if (!$ratings): ?>
+                    <p class="empty-state">No ratings yet.</p>
+                <?php else: ?>
+                    <p class="results-count"><?= count($ratings) ?> rating(s).</p>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Image</th>
+                                    <th>Rating</th>
+                                    <th>Submitted</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($ratings as $r): ?>
+                                    <tr>
+                                        <td><?= h((string) $r['username']) ?></td>
+                                        <td>
+                                            <a href="photo.php?id=<?= (int) $r['slika_id'] ?>">
+                                                <?= h((string) $r['naziv_datoteke']) ?>
+                                            </a>
+                                        </td>
+                                        <td><?= (int) $r['ocjena'] ?> / 5</td>
+                                        <td><?= h((string) $r['vrijeme_ocjene']) ?></td>
+                                        <td class="row-actions">
+                                            <form method="post" action="dashboard.php"
+                                                  onsubmit="return confirm('Delete this rating?');">
+                                                <input type="hidden" name="op" value="delete_rating">
+                                                <input type="hidden" name="id" value="<?= (int) $r['id'] ?>">
+                                                <button type="submit" class="btn-link btn-link-danger">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php endif; ?>
             </section>
         <?php else: ?>
             <section class="content-section">

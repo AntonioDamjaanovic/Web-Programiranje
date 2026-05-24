@@ -51,3 +51,23 @@ CREATE TABLE IF NOT EXISTS ratings (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (film_id) REFERENCES films(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS slike (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    naziv_datoteke VARCHAR(255) NOT NULL,
+    opis TEXT,
+    putanja VARCHAR(500) NOT NULL,
+    izvor ENUM('local','api') NOT NULL DEFAULT 'local',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS ocjene (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_korisnik INT NOT NULL,
+    id_slika INT NOT NULL,
+    ocjena TINYINT NOT NULL CHECK (ocjena BETWEEN 1 AND 5),
+    vrijeme_ocjene TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_korisnik_slika (id_korisnik, id_slika),
+    FOREIGN KEY (id_korisnik) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_slika)    REFERENCES slike(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
